@@ -576,11 +576,14 @@ if "Allergies" in feature_names:
 # BLOOD GROUP
 # =========================================================
 
+# =========================================================
+# BLOOD GROUP
+# =========================================================
+
 blood_group_features = [
     f for f in feature_names
     if f.startswith("Blood_Group_")
 ]
-
 
 if blood_group_features:
 
@@ -588,24 +591,28 @@ if blood_group_features:
 
     st.header("🩸 Blood Group")
 
-    blood_groups = []
+    # Include common blood groups
+    available_groups = ["A", "B", "AB", "O"]
 
-    for feature in blood_group_features:
+    # Keep only groups actually represented in the model
+    model_groups = [
+        f.replace("Blood_Group_", "")
+        for f in blood_group_features
+    ]
 
-        group = feature.replace(
-            "Blood_Group_",
-            ""
-        )
-
-        blood_groups.append(group)
-
+    # Combine model groups with common groups
+    blood_groups = [
+        group for group in available_groups
+        if group in model_groups
+    ]
 
     blood_group = st.selectbox(
         "Select Blood Group",
-        blood_groups
+        blood_groups,
+        help="Select the patient's blood group."
     )
 
-
+    # Set one-hot encoded blood-group columns
     for feature in blood_group_features:
 
         group = feature.replace(
@@ -616,7 +623,6 @@ if blood_group_features:
         input_values[feature] = (
             1 if group == blood_group else 0
         )
-
 
 # =========================================================
 # INITIALIZE ANY REMAINING ONE-HOT FEATURES
