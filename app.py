@@ -5,7 +5,7 @@ import joblib
 
 
 # =========================================================
-# PAGE CONFIG
+# PAGE CONFIGURATION
 # =========================================================
 
 st.set_page_config(
@@ -16,7 +16,7 @@ st.set_page_config(
 
 
 # =========================================================
-# LOAD MODEL + SCALER
+# LOAD MODEL AND SCALER
 # =========================================================
 
 @st.cache_resource
@@ -40,14 +40,12 @@ except Exception as e:
 
 
 # =========================================================
-# GET EXACT TRAINING FEATURES
+# GET EXACT FEATURES USED DURING TRAINING
 # =========================================================
 
 if hasattr(scaler, "feature_names_in_"):
 
-    feature_names = list(
-        scaler.feature_names_in_
-    )
+    feature_names = list(scaler.feature_names_in_)
 
 else:
 
@@ -69,16 +67,18 @@ st.markdown(
     """
     ### Understand your health profile with Machine Learning
 
-    Enter the information below and Health Stratify will analyze
-    the provided health and lifestyle factors using the trained
-    machine learning model.
+    Enter your health, lifestyle, and personal information below.
+    Health Stratify will analyze the information using a trained
+    machine learning model and provide an easy-to-understand result.
     """
 )
 
 st.info(
-    "⚠️ This is a machine-learning project for educational and "
+    "⚠️ This application is designed for educational and "
     "predictive purposes. It is not a medical diagnosis."
 )
+
+st.divider()
 
 
 # =========================================================
@@ -110,7 +110,8 @@ if "Age" in feature_names:
             min_value=18,
             max_value=100,
             value=25,
-            step=1
+            step=1,
+            help="Enter age between 18 and 100 years."
         )
 
         st.caption("Enter your age in years.")
@@ -129,14 +130,15 @@ if "BMI" in feature_names:
             min_value=15.0,
             max_value=45.0,
             value=22.5,
-            step=0.1
+            step=0.1,
+            help="Enter BMI between 15 and 45."
         )
 
-        st.caption("Enter your BMI value.")
+        st.caption("Body Mass Index (BMI).")
 
 
 # =========================================================
-# BODY / VITAL INFORMATION
+# BODY AND VITAL INFORMATION
 # =========================================================
 
 st.header("❤️ Body & Vital Information")
@@ -168,10 +170,11 @@ if blood_pressure_feature:
             min_value=80.0,
             max_value=200.0,
             value=120.0,
-            step=1.0
+            step=1.0,
+            help="Enter systolic blood pressure between 80 and 200 mmHg."
         )
 
-        st.caption("Enter systolic blood pressure.")
+        st.caption("Systolic blood pressure in mmHg.")
 
 
 # ---------------------------------------------------------
@@ -198,10 +201,11 @@ if heart_rate_feature:
             min_value=40.0,
             max_value=150.0,
             value=72.0,
-            step=1.0
+            step=1.0,
+            help="Enter resting heart rate between 40 and 150 BPM."
         )
 
-        st.caption("Enter resting heart rate in BPM.")
+        st.caption("Resting heart rate in BPM.")
 
 
 # ---------------------------------------------------------
@@ -228,10 +232,11 @@ if glucose_feature:
             min_value=50.0,
             max_value=300.0,
             value=95.0,
-            step=1.0
+            step=1.0,
+            help="Enter glucose level between 50 and 300 mg/dL."
         )
 
-        st.caption("Enter blood glucose level.")
+        st.caption("Blood glucose level in mg/dL.")
 
 
 # ---------------------------------------------------------
@@ -247,10 +252,11 @@ if "Cholesterol" in feature_names:
             min_value=100.0,
             max_value=350.0,
             value=180.0,
-            step=1.0
+            step=1.0,
+            help="Enter cholesterol between 100 and 350 mg/dL."
         )
 
-        st.caption("Enter cholesterol level.")
+        st.caption("Cholesterol level in mg/dL.")
 
 
 # =========================================================
@@ -288,10 +294,11 @@ if sleep_feature:
             min_value=3.0,
             max_value=12.0,
             value=7.0,
-            step=0.5
+            step=0.5,
+            help="Enter average sleep between 3 and 12 hours per day."
         )
 
-        st.caption("Average hours of sleep per day.")
+        st.caption("Average sleep per day in hours.")
 
 
 # ---------------------------------------------------------
@@ -318,14 +325,15 @@ if exercise_feature:
             min_value=0.0,
             max_value=8.0,
             value=1.0,
-            step=0.5
+            step=0.5,
+            help="Enter average exercise between 0 and 8 hours per day."
         )
 
-        st.caption("Average hours of exercise per day.")
+        st.caption("Average exercise per day in hours.")
 
 
 # ---------------------------------------------------------
-# WATER
+# WATER INTAKE
 # ---------------------------------------------------------
 
 water_feature = None
@@ -348,10 +356,11 @@ if water_feature:
             min_value=0.5,
             max_value=6.0,
             value=2.5,
-            step=0.1
+            step=0.1,
+            help="Enter average water intake between 0.5 and 6 litres per day."
         )
 
-        st.caption("Average water intake per day.")
+        st.caption("Average water intake per day in litres.")
 
 
 # ---------------------------------------------------------
@@ -377,11 +386,12 @@ if stress_feature:
             "🧠 Stress Level",
             min_value=1,
             max_value=10,
-            value=4
+            value=4,
+            help="1 = Very Low Stress, 10 = Very High Stress."
         )
 
         st.caption(
-            "1 = very low stress  •  10 = very high stress"
+            "Choose a value from 1 (very low) to 10 (very high)."
         )
 
 
@@ -435,7 +445,7 @@ if "Alcohol" in feature_names:
 
 
 # =========================================================
-# PERSONAL / MEDICAL INFORMATION
+# PERSONAL AND MEDICAL INFORMATION
 # =========================================================
 
 st.divider()
@@ -470,7 +480,8 @@ if physical_feature:
                 "Low",
                 "Moderate",
                 "High"
-            ]
+            ],
+            help="Choose the level that best describes your usual activity."
         )
 
         activity_mapping = {
@@ -509,7 +520,8 @@ if mental_feature:
                 "Poor",
                 "Average",
                 "Good"
-            ]
+            ],
+            help="Choose the option that best describes your current mental health."
         )
 
         mental_mapping = {
@@ -573,8 +585,50 @@ if "Allergies" in feature_names:
 
 
 # =========================================================
-# BLOOD GROUP
+# DIET
 # =========================================================
+
+diet_feature = None
+
+if "Diet" in feature_names:
+
+    diet_feature = "Diet"
+
+elif "diet" in feature_names:
+
+    diet_feature = "diet"
+
+
+if diet_feature:
+
+    st.divider()
+
+    st.header("🥗 Diet")
+
+    diet = st.selectbox(
+        "How would you describe your usual diet?",
+        [
+            "Vegetarian",
+            "Non-Vegetarian",
+            "Mixed",
+            "Other"
+        ]
+    )
+
+    # IMPORTANT:
+    # This assumes the training encoding follows this mapping.
+    # Change this mapping if your training preprocessing used
+    # different numerical values.
+
+    diet_mapping = {
+        "Vegetarian": 0,
+        "Non-Vegetarian": 1,
+        "Mixed": 2,
+        "Other": 3
+    }
+
+    input_values[diet_feature] = diet_mapping[diet]
+
 
 # =========================================================
 # BLOOD GROUP
@@ -585,34 +639,48 @@ blood_group_features = [
     if f.startswith("Blood_Group_")
 ]
 
+
 if blood_group_features:
 
     st.divider()
 
     st.header("🩸 Blood Group")
 
-    # Include common blood groups
-    available_groups = ["A", "B", "AB", "O"]
+    # Common blood groups
+    available_groups = [
+        "A",
+        "B",
+        "AB",
+        "O"
+    ]
 
-    # Keep only groups actually represented in the model
+    # Groups actually present in the trained model
     model_groups = [
         f.replace("Blood_Group_", "")
         for f in blood_group_features
     ]
 
-    # Combine model groups with common groups
+    # Only use groups that the trained model knows
     blood_groups = [
-        group for group in available_groups
+        group
+        for group in available_groups
         if group in model_groups
     ]
 
+    # Safety fallback
+    if not blood_groups:
+
+        blood_groups = model_groups
+
+
     blood_group = st.selectbox(
-        "Select Blood Group",
+        "Select your blood group",
         blood_groups,
-        help="Select the patient's blood group."
+        help="Choose your blood group."
     )
 
-    # Set one-hot encoded blood-group columns
+
+    # One-hot encoding
     for feature in blood_group_features:
 
         group = feature.replace(
@@ -624,21 +692,20 @@ if blood_group_features:
             1 if group == blood_group else 0
         )
 
+
 # =========================================================
-# INITIALIZE ANY REMAINING ONE-HOT FEATURES
+# INITIALIZE REMAINING FEATURES
 # =========================================================
 
 for feature in feature_names:
 
     if feature not in input_values:
 
-        if "_" in feature:
-
-            input_values[feature] = 0
+        input_values[feature] = 0
 
 
 # =========================================================
-# PREDICTION BUTTON
+# PREDICTION SECTION
 # =========================================================
 
 st.divider()
@@ -646,9 +713,10 @@ st.divider()
 st.header("🔍 Check Your Result")
 
 st.write(
-    "Once all information is entered, click the button "
-    "below to analyze the profile."
+    "Review your information and click the button below "
+    "to analyze your profile."
 )
+
 
 predict_button = st.button(
     "🔍 Analyze My Health Profile",
@@ -658,15 +726,12 @@ predict_button = st.button(
 
 
 # =========================================================
-# HUMAN-FRIENDLY ANALYSIS
+# HUMAN-FRIENDLY FEEDBACK FUNCTION
 # =========================================================
 
 def generate_feedback(values):
 
-    feedback = []
-
     positives = []
-
     attention = []
 
 
@@ -681,22 +746,23 @@ def generate_feedback(values):
         if 7 <= sleep <= 9:
 
             positives.append(
-                f"Your reported sleep is {sleep:g} hours per day."
+                f"You reported {sleep:g} hours of sleep per day, "
+                "which is within the commonly recommended range for adults."
             )
 
         elif sleep < 7:
 
             attention.append(
-                f"You reported {sleep:g} hours of sleep per day. "
+                f"You reported only {sleep:g} hours of sleep per day. "
                 "Consider maintaining a consistent sleep routine "
-                "and giving adequate time for rest."
+                "and allowing enough time for rest."
             )
 
         else:
 
             attention.append(
                 f"You reported {sleep:g} hours of sleep per day. "
-                "Try to keep your sleep schedule consistent."
+                "Try to maintain a consistent sleep schedule."
             )
 
 
@@ -718,7 +784,7 @@ def generate_feedback(values):
 
             attention.append(
                 "Your reported exercise level is quite low. "
-                "Adding regular movement to your routine may be useful."
+                "Consider adding more regular movement to your routine."
             )
 
 
@@ -740,7 +806,7 @@ def generate_feedback(values):
 
             attention.append(
                 f"You reported around {water:g} litres of water per day. "
-                "Try to maintain regular hydration throughout the day."
+                "Consider maintaining regular hydration throughout the day."
             )
 
 
@@ -762,16 +828,16 @@ def generate_feedback(values):
 
             attention.append(
                 f"Your reported stress level is {stress}/10. "
-                "You may benefit from regular breaks, physical activity, "
-                "relaxation, or time away from screens."
+                "Regular breaks, physical activity, relaxation, "
+                "or time away from screens may help with stress management."
             )
 
         else:
 
             attention.append(
-                f"Your reported stress level is {stress}/10, "
-                "which is high on the scale you provided. "
-                "Consider giving more attention to stress management."
+                f"Your reported stress level is {stress}/10. "
+                "This is high on the scale used in this application. "
+                "Consider paying more attention to stress management."
             )
 
 
@@ -783,11 +849,19 @@ def generate_feedback(values):
 
         bmi = values["BMI"]
 
-        feedback.append(
-            f"Your entered BMI is {bmi:.1f}. "
-            "BMI is one factor among many and should be interpreted "
-            "in context rather than by itself."
-        )
+        if 18.5 <= bmi < 25:
+
+            positives.append(
+                f"Your entered BMI is {bmi:.1f}."
+            )
+
+        else:
+
+            attention.append(
+                f"Your entered BMI is {bmi:.1f}. "
+                "BMI is only one health indicator and should be "
+                "interpreted in the context of other factors."
+            )
 
 
     # -----------------------------------------------------
@@ -826,8 +900,8 @@ def generate_feedback(values):
 
             attention.append(
                 "You reported alcohol consumption. "
-                "Keeping consumption within your personal health goals "
-                "is worth considering."
+                "Consider keeping consumption within your personal "
+                "health goals."
             )
 
 
@@ -835,7 +909,7 @@ def generate_feedback(values):
 
 
 # =========================================================
-# RUN MODEL
+# RUN PREDICTION
 # =========================================================
 
 if predict_button:
@@ -843,7 +917,7 @@ if predict_button:
     try:
 
         # -------------------------------------------------
-        # CREATE DATAFRAME
+        # CREATE INPUT DATAFRAME
         # -------------------------------------------------
 
         input_data = pd.DataFrame(
@@ -852,7 +926,7 @@ if predict_button:
 
 
         # -------------------------------------------------
-        # EXACT TRAINING COLUMN ORDER
+        # EXACT SAME FEATURE ORDER AS TRAINING
         # -------------------------------------------------
 
         input_data = input_data.reindex(
@@ -862,7 +936,7 @@ if predict_button:
 
 
         # -------------------------------------------------
-        # NUMERIC CONVERSION
+        # CONVERT EVERYTHING TO NUMERIC
         # -------------------------------------------------
 
         input_data = input_data.apply(
@@ -884,13 +958,12 @@ if predict_button:
 
 
         # -------------------------------------------------
-        # MODEL PREDICTION
+        # PREDICT
         # -------------------------------------------------
 
         prediction = model.predict(
             scaled_input
         )
-
 
         predicted_class = prediction[0]
 
@@ -903,10 +976,6 @@ if predict_button:
 
         st.header("📊 Your Result")
 
-
-        # -------------------------------------------------
-        # CLASS RESULT
-        # -------------------------------------------------
 
         if predicted_class == 1:
 
@@ -922,13 +991,14 @@ if predict_button:
 
 
         st.caption(
-            "This classification is the output of the trained "
-            "machine learning model. It is not a medical diagnosis."
+            "Class 0 and Class 1 represent the target classes "
+            "learned from the training dataset. They should not "
+            "be interpreted as a medical diagnosis."
         )
 
 
         # =================================================
-        # CONFIDENCE
+        # MODEL CONFIDENCE
         # =================================================
 
         if hasattr(model, "predict_proba"):
@@ -948,15 +1018,17 @@ if predict_button:
 
 
         # =================================================
-        # SIMPLE EXPLANATION
+        # HUMAN-FRIENDLY OBSERVATIONS
         # =================================================
 
-        st.subheader("💬 What your information tells us")
+        st.subheader(
+            "💬 What your information tells us"
+        )
 
         st.write(
-            "Here are some simple observations based on the "
-            "information you entered. These observations are "
-            "separate from the model's classification."
+            "These observations are based on the information "
+            "you entered. They are separate from the model's "
+            "classification."
         )
 
 
@@ -966,12 +1038,14 @@ if predict_button:
 
 
         # -------------------------------------------------
-        # POSITIVE OBSERVATIONS
+        # POSITIVE POINTS
         # -------------------------------------------------
 
         if positives:
 
-            st.markdown("### ✅ Positive points")
+            st.markdown(
+                "### ✅ Positive points"
+            )
 
             for item in positives:
 
@@ -981,12 +1055,14 @@ if predict_button:
 
 
         # -------------------------------------------------
-        # AREAS TO PAY ATTENTION TO
+        # ATTENTION
         # -------------------------------------------------
 
         if attention:
 
-            st.markdown("### 💡 Things you may want to pay attention to")
+            st.markdown(
+                "### 💡 Things you may want to pay attention to"
+            )
 
             for item in attention:
 
@@ -997,52 +1073,56 @@ if predict_button:
         else:
 
             st.success(
-                "Your entered lifestyle information does not "
-                "highlight any of the basic areas checked by this app."
+                "No major lifestyle areas were highlighted "
+                "by the basic checks in this application."
             )
 
 
         # =================================================
-        # PERSONALIZED SUMMARY
+        # SIMPLE SUMMARY
         # =================================================
 
-        st.subheader("📝 Simple Summary")
+        st.subheader(
+            "📝 Simple Summary"
+        )
+
 
         if predicted_class == 1:
 
             st.write(
-                "The machine learning model placed this profile "
-                "in Class 1. This result should be viewed together "
-                "with the individual factors above rather than "
-                "as a diagnosis."
+                "Based on the information provided, the machine "
+                "learning model placed this profile in Class 1. "
+                "This is a model prediction and should be considered "
+                "alongside the individual factors shown above."
             )
 
         else:
 
             st.write(
-                "The machine learning model placed this profile "
-                "in Class 0. This is the model's classification "
-                "based on the information provided."
+                "Based on the information provided, the machine "
+                "learning model placed this profile in Class 0. "
+                "This is the classification produced by the trained model."
             )
 
 
         # =================================================
-        # GENERAL NEXT STEPS
+        # GENERAL SUGGESTIONS
         # =================================================
 
-        st.subheader("🌱 General Next Steps")
+        st.subheader(
+            "🌱 General Suggestions"
+        )
 
-        st.write(
+        st.markdown(
             """
-            • Keep track of your health information regularly.
-
-            • Maintain a consistent sleep and activity routine.
-
-            • Pay attention to stress and lifestyle habits.
-
-            • If any health measurement is concerning or you have
-              symptoms, discuss it with a qualified healthcare
-              professional.
+            - Maintain a consistent sleep routine.
+            - Include regular physical activity in your routine.
+            - Stay adequately hydrated.
+            - Pay attention to stress and mental well-being.
+            - Avoid or reduce smoking and excessive alcohol consumption.
+            - Keep track of important health measurements.
+            - If you have symptoms or concerns about your health,
+              consult a qualified healthcare professional.
             """
         )
 
@@ -1056,8 +1136,7 @@ if predict_button:
         ):
 
             st.write(
-                "The following processed values were sent "
-                "to the trained machine learning model:"
+                "Processed data sent to the machine learning model:"
             )
 
             st.dataframe(
