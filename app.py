@@ -634,63 +634,50 @@ if diet_feature:
 # BLOOD GROUP
 # =========================================================
 
+st.divider()
+
+st.header("🩸 Blood Group")
+
+blood_group = st.selectbox(
+    "Select your blood group",
+    [
+        "A",
+        "B",
+        "AB",
+        "O"
+    ],
+    help="Select your blood group."
+)
+
+# Find blood-group columns actually used during training
 blood_group_features = [
     f for f in feature_names
     if f.startswith("Blood_Group_")
 ]
 
+# Set all known blood-group model features to 0
+for feature in blood_group_features:
 
-if blood_group_features:
-
-    st.divider()
-
-    st.header("🩸 Blood Group")
-
-    # Common blood groups
-    available_groups = [
-        "A",
-        "B",
-        "AB",
-        "O"
-    ]
-
-    # Groups actually present in the trained model
-    model_groups = [
-        f.replace("Blood_Group_", "")
-        for f in blood_group_features
-    ]
-
-    # Only use groups that the trained model knows
-    blood_groups = [
-        group
-        for group in available_groups
-        if group in model_groups
-    ]
-
-    # Safety fallback
-    if not blood_groups:
-
-        blood_groups = model_groups
+    input_values[feature] = 0
 
 
-    blood_group = st.selectbox(
-        "Select your blood group",
-        blood_groups,
-        help="Choose your blood group."
+# Set the selected blood group to 1
+selected_feature = f"Blood_Group_{blood_group}"
+
+if selected_feature in feature_names:
+
+    input_values[selected_feature] = 1
+
+else:
+
+    # The UI allows A/B/AB/O, but the trained model
+    # does not contain this particular blood-group feature.
+
+    st.warning(
+        f"Blood group {blood_group} is available for selection, "
+        "but this blood group was not present as a feature in "
+        "the trained model. It will therefore not affect this prediction."
     )
-
-
-    # One-hot encoding
-    for feature in blood_group_features:
-
-        group = feature.replace(
-            "Blood_Group_",
-            ""
-        )
-
-        input_values[feature] = (
-            1 if group == blood_group else 0
-        )
 
 
 # =========================================================
